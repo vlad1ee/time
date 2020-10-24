@@ -18,7 +18,11 @@ def index(request):
         if request.POST.get('incoming'):
             user = request.user
             profile = Profile.objects.get(user=user)
-            TimeControl.objects.create(user=profile, incoming=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            TimeControl.objects.create(
+                user=profile,
+                incoming=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                date=datetime.date.today()
+            )
             return redirect('index')
         elif request.POST.get('outcoming'):
             user = request.user
@@ -41,7 +45,8 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             company = Company.objects.get(name=form.cleaned_data['company'])
-            Profile.objects.create(user=user, company=company, position=form.cleaned_data['position'])
+            Profile.objects.create(user=user, company=company,
+                                   position=form.cleaned_data['position'])
             login(request, user)
             return redirect('index')
         else:
@@ -53,16 +58,28 @@ def signup(request):
 class TimeControlListView(generic.ListView):
     model = TimeControl
     template_name = 'time_control_list.html'
+    extra_context = {}
 
     def get_queryset(self):
         user = self.request.user
         company = user.profile.company
-        queryset = TimeControl.objects.filter(user__company=company).order_by('-incoming')
-        return queryset
+        queryset = TimeControl.objects.filter(
+            user__company=company).order_by('-incoming')
+        dates = [i[0] for i in set(queryset.values_list('date'))]
+        print(sorted(dates))
+        profiles = Profile.objects.filter(company=company)
+        res = []
+        for profile in profiles:
+            timecontrols = queryset.filter(user=profile)
+            res.append([profile, timecontrols])
+        self.extra_context.update({
+            'dates': sorted(dates)
+        })
+        print(datetime.date.today())
+        return res
 
     def get(self, request, *args, **kwargs):
         user = request.user
         if user.is_staff:
             return super().get(request, *args, **kwargs)
         return redirect('index')
-
