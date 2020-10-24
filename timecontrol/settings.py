@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'timecontrolapp'
+    'django_filters',
+
+    'timecontrolapp',
 ]
 
 MIDDLEWARE = [
