@@ -34,11 +34,11 @@ def index(request):
             time.save()
             return redirect('index')
     user = request.user
-    time_control = TimeControl.objects.filter(user__user=user).filter(
-        incoming__gte=datetime.date.today())
+    time_control = TimeControl.objects.filter(user__user=user,
+                                              date=datetime.date.today())
     if time_control:
         if time_control.last().outcoming:
-            time_control = ''
+            time_control = 'exist'
     return render(request, 'index.html', {"time_control": time_control})
     
 
