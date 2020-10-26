@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
+from django.urls import reverse
 from django.views import generic
+
+from .filters import TimecontrolDateFilter
 from .forms import SignUpForm
 from .models import Company, Profile, TimeControl
 from django.contrib.auth.decorators import login_required
@@ -13,7 +16,7 @@ import datetime
 def index(request):
     user = request.user
     if user.is_staff:
-        return redirect('list')
+        return redirect(reverse('list') + '?date_range=today')
     if request.method =='POST':
         if request.POST.get('incoming'):
             user = request.user
@@ -59,23 +62,24 @@ class TimeControlListView(generic.ListView):
     model = TimeControl
     template_name = 'time_control_list.html'
     extra_context = {}
+    filter = TimecontrolDateFilter
 
     def get_queryset(self):
         user = self.request.user
         company = user.profile.company
         queryset = TimeControl.objects.filter(
             user__company=company).order_by('-incoming')
-        dates = [i[0] for i in set(queryset.values_list('date'))]
-        print(sorted(dates))
+        filter = self.filter(self.request.GET, queryset=queryset)
+        dates = filter.qs.dates('incoming', 'day')
         profiles = Profile.objects.filter(company=company)
         res = []
         for profile in profiles:
-            timecontrols = queryset.filter(user=profile)
+            timecontrols = filter.qs.filter(user=profile)
             res.append([profile, timecontrols])
         self.extra_context.update({
-            'dates': sorted(dates)
+            'dates': sorted(dates),
+            'filter': filter
         })
-        print(datetime.date.today())
         return res
 
     def get(self, request, *args, **kwargs):
