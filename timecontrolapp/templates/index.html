@@ -9,22 +9,23 @@
     <title>Document</title>
 </head>
 
-<body
-    style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; background-color: #005a87;">
-    <h1
-        style="margin-bottom: 50px; font-size: 3em; text-transform: uppercase;text-align: center ;color: white; font-weight: bold;">
-        {{user.first_name}} {{user.last_name}}</h1>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; background-color: #005a87;">
+    <h1 style="margin-bottom: 50px; font-size: 3em; text-transform: uppercase;text-align: center ;color: white; font-weight: bold;">{{user.first_name}} {{user.last_name}}</h1>
+    {% if time_control == 'exist' %}
+        <h3 style="margin-bottom: 50px;text-align: center ;color: white; font-weight: bold;">Вы уже нажали "Уход" сегодня</h3>
+    {% else %}
+        <form method="POST">{% csrf_token %}
+        {% if not time_control %}
+            <input type="hidden" value="1" name='incoming'>
+            <button class='btn btn-success' type="submit" >Приход</button>
+        {% else %}
+            <input type="hidden" value="1" name='outcoming'>
+            <button class='btn btn-danger' type="submit" >Уход</button>
+        {% endif %}
+    {% endif %}
+    
+</form>
 
-    <form method="POST">{% csrf_token %}
-        {%if not time_control %}
-        <input type="hidden" value="1" name='incoming'>
-        <button class='btn btn-success' type="submit">Приход</button>
-        {%else%}
-        <input type="hidden" value="1" name='outcoming'>
-        <button class='btn btn-danger' type="submit">Уход</button>
-        {%endif%}
-
-    </form>
 </body>
 
 </html>
