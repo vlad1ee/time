@@ -21,11 +21,11 @@ class Profile(models.Model):
 
 
 class TimeControl(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE,
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE,
                              related_name="timecontrols")
     incoming = models.DateTimeField()
     outcoming = models.DateTimeField(null=True, blank=True)
     date = models.DateField()
 
     def __str__(self):
-        return f'{self.user} - {self.incoming} - {self.outcoming}'
+        return f'{self.profile} - {self.incoming} - {self.outcoming}'
