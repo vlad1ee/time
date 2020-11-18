@@ -26,7 +26,8 @@ SECRET_KEY = 'e9_ct5ka80o7ch-4s!f-d2ag_ig*)0!_o*)lhv*xntv-w06kj%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','.pythonanywhere.com', '0.0.0.0', '192.168.0.19' ]
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', '0.0.0.0',
+                 '192.168.0.127']
 
 # Application definition
 
@@ -80,9 +81,15 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ]
+    ],
+    'DEFAULT_RENDERER_CLASSES': (
+        'timecontrol.renderers.UTF8CharsetJSONRenderer',
+    ),
 }
 
 

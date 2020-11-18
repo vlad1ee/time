@@ -27,3 +27,36 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = '__all__'
 
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'first_name', 'last_name']
+
+
+class ProfileCreateSerializer(serializers.ModelSerializer):
+    position = serializers.CharField(source='profile.position')
+    company = serializers.CharField(source='profile.company', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'first_name', 'last_name',
+                  'position', 'company']
+
+    def create(self, validated_data):
+        print(validated_data)
+        position = validated_data.pop('profile').get('position')
+        company = validated_data.pop('company')
+        password = validated_data.pop('password')
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        profile = Profile.objects.create(user=user, position=position,
+                                         company=company)
+        return user
+
+
+class TestSerializer(serializers.Serializer):
+    date = serializers.DateField()
+
+
