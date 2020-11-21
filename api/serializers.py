@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from rest_framework.fields import SerializerMethodField
 
 from timecontrolapp.models import TimeControl, Profile
 
@@ -54,9 +55,3 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
         profile = Profile.objects.create(user=user, position=position,
                                          company=company)
         return user
-
-
-class TestSerializer(serializers.Serializer):
-    date = serializers.DateField()
-
-
