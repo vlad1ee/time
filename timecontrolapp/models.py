@@ -15,6 +15,7 @@ class Profile(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE,
                                 related_name="profiles")
     position = models.CharField(max_length=50)
+    subscription = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
