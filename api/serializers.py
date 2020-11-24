@@ -13,19 +13,20 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['username', 'first_name', 'last_name']
 
 
-class TimecontrolSerializer(serializers.ModelSerializer):
-    profile = serializers.PrimaryKeyRelatedField(read_only=True)
-
-    class Meta:
-        model = TimeControl
-        fields = '__all__'
-
-
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
     class Meta:
         model = Profile
+        fields = '__all__'
+
+
+class TimecontrolSerializer(serializers.ModelSerializer):
+    # profile = serializers.PrimaryKeyRelatedField(read_only=True)
+    profile = ProfileSerializer()
+
+    class Meta:
+        model = TimeControl
         fields = '__all__'
 
 
