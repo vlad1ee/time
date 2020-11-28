@@ -1,7 +1,8 @@
 from django.urls import path, include
 
 from api.views import TimecontrolApiView, TimecontrolListAPIView, \
-    ProfileCreateAPIView, ProfileListAPIView, UserDeleteAPIView
+    ProfileCreateAPIView, ProfileListAPIView, UserDeleteAPIView, \
+    CompanyDetailAPIView
 
 urlpatterns = [
     # path('auth/', include('rest_auth.urls')),
@@ -11,5 +12,6 @@ urlpatterns = [
     path('user/create/', ProfileCreateAPIView.as_view()),
     path('user/delete/<int:pk>/', UserDeleteAPIView.as_view(),),
     path('user/list/', ProfileListAPIView.as_view()),
+    path('company/detail/', CompanyDetailAPIView.as_view()),
     # path('test/', TimecontrolListByProfileAPIView.as_view())
 ]
