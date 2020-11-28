@@ -56,3 +56,12 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
         profile = Profile.objects.create(user=user, position=position,
                                          company=company)
         return user
+
+
+class CompanySerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    company = serializers.SlugRelatedField(read_only=True, slug_field='name')
+
+    class Meta:
+        model = Profile
+        exclude = ['position']
