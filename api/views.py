@@ -4,8 +4,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.filters import TimecontrolProfileDateFilter
+from api.permissions import SubscribtionIsActive
 from api.serializers import TimecontrolSerializer, ProfileCreateSerializer, \
-    ProfileSerialize 
+    ProfileSerializer, CompanySerializer
 from api.utils import post_timecontrol_api_view_response, \
     get_timecontrol_api_view_response
 from timecontrolapp.models import Profile, TimeControl
@@ -38,7 +39,7 @@ class TimecontrolListAPIView(generics.ListAPIView):
 
 class ProfileCreateAPIView(generics.CreateAPIView):
     serializer_class = ProfileCreateSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminUser, SubscribtionIsActive]
 
     def perform_create(self, serializer):
         company = self.request.user.profile.company
@@ -47,7 +48,7 @@ class ProfileCreateAPIView(generics.CreateAPIView):
 
 class UserDeleteAPIView(generics.DestroyAPIView):
     queryset = Profile.objects.all()
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminUser, SubscribtionIsActive]
 
     def perform_destroy(self, instance):
         user = instance.user
@@ -56,10 +57,22 @@ class UserDeleteAPIView(generics.DestroyAPIView):
 
 class ProfileListAPIView(generics.ListAPIView):
     serializer_class = ProfileSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminUser, SubscribtionIsActive]
 
     def get_queryset(self):
         company = self.request.user.profile.company
         queryset = Profile.objects.filter(company=company)
         return queryset
+<<<<<<< HEAD
         
+=======
+
+
+class CompanyDetailAPIView(generics.RetrieveUpdateAPIView):
+    serializer_class = CompanySerializer
+    permission_classes = [IsAdminUser, SubscribtionIsActive]
+
+    def get_object(self):
+        obj = self.request.user.profile
+        return obj
+>>>>>>> 00fdd7e5ad8d6307ee188cc0596d695768346b12

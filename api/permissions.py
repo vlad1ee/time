@@ -6,6 +6,7 @@ class SubscribtionIsActive(permissions.BasePermission):
 
     def has_permission(self, request, view):
         profile = request.user.profile
-        if profile.subscription and profile.subscription >= timezone.now():
+        if profile.subscription and \
+                profile.subscription >= timezone.now().date():
             return True
         return False
