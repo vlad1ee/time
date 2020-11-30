@@ -63,9 +63,6 @@ class ProfileListAPIView(generics.ListAPIView):
         company = self.request.user.profile.company
         queryset = Profile.objects.filter(company=company)
         return queryset
-<<<<<<< HEAD
-        
-=======
 
 
 class CompanyDetailAPIView(generics.RetrieveUpdateAPIView):
@@ -75,4 +72,3 @@ class CompanyDetailAPIView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         obj = self.request.user.profile
         return obj
->>>>>>> 00fdd7e5ad8d6307ee188cc0596d695768346b12
