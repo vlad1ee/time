@@ -39,12 +39,15 @@ class TimecontrolListAPIView(generics.ListAPIView):
 
 class ProfileCreateAPIView(generics.CreateAPIView):
     serializer_class = ProfileCreateSerializer
-    permission_classes = [IsAdminUser, SubscribtionIsActive]
+    permission_classes = []
 
     def perform_create(self, serializer):
-        company = self.request.user.profile.company
-        serializer.save(company=company)
-
+        if not self.request.user.is_anonymous:
+            company = self.request.user.profile.company
+            serializer.save(company=company)
+        else:
+            serializer.save()
+        
 
 class UserDeleteAPIView(generics.DestroyAPIView):
     queryset = Profile.objects.all()
