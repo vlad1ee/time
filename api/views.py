@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from api.filters import TimecontrolProfileDateFilter
 from api.serializers import TimecontrolSerializer, ProfileCreateSerializer, \
-    ProfileSerializer
+    ProfileSerialize 
 from api.utils import post_timecontrol_api_view_response, \
     get_timecontrol_api_view_response
 from timecontrolapp.models import Profile, TimeControl
@@ -62,3 +62,4 @@ class ProfileListAPIView(generics.ListAPIView):
         company = self.request.user.profile.company
         queryset = Profile.objects.filter(company=company)
         return queryset
+        

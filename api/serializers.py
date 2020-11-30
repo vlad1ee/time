@@ -56,3 +56,4 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
         profile = Profile.objects.create(user=user, position=position,
                                          company=company)
         return user
+        
