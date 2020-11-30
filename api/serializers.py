@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
-from timecontrolapp.models import TimeControl, Profile
+from timecontrolapp.models import TimeControl, Profile, Company
 
 User = get_user_model()
 
@@ -38,7 +38,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 class ProfileCreateSerializer(serializers.ModelSerializer):
     position = serializers.CharField(source='profile.position')
-    company = serializers.CharField(source='profile.company', read_only=True)
+    company = serializers.CharField(source='profile.company')
 
     class Meta:
         model = User
@@ -47,8 +47,11 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         print(validated_data)
-        position = validated_data.pop('profile').get('position')
-        company = validated_data.pop('company')
+        profile = validated_data.pop('profile')
+        position = profile.get('position')
+        company = validated_data.get('company')
+        if not company:
+            company = Company.objects.get(name=profile.get('company'))
         password = validated_data.pop('password')
         user = User(**validated_data)
         user.set_password(password)
@@ -65,3 +68,4 @@ class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         exclude = ['position']
+
