@@ -38,7 +38,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 class ProfileCreateSerializer(serializers.ModelSerializer):
     position = serializers.CharField(source='profile.position')
-    company = serializers.CharField(source='profile.company')
+    company = serializers.CharField(source='profile.company', required=False)
 
     class Meta:
         model = User
