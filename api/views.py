@@ -27,7 +27,7 @@ class TimecontrolApiView(APIView):
 
 class TimecontrolListAPIView(generics.ListAPIView):
     serializer_class = TimecontrolSerializer
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
     filterset_class = TimecontrolProfileDateFilter
 
     def get_queryset(self):
