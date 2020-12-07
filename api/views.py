@@ -31,9 +31,15 @@ class TimecontrolListAPIView(generics.ListAPIView):
     filterset_class = TimecontrolProfileDateFilter
 
     def get_queryset(self):
+        user = self.request.user
         company = self.request.user.profile.company
-        queryset = TimeControl.objects.filter(
-            profile__company=company).order_by('date')
+        if user.is_staff:
+            queryset = TimeControl.objects.filter(
+                profile__company=company).order_by('date')
+        else:
+            queryset = TimeControl.objects.filter(
+                profile=user.profile,
+                profile__company=company).order_by('date')
         return queryset
 
 
