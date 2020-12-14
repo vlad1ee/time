@@ -50,7 +50,9 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
         profile = validated_data.pop('profile')
         position = profile.get('position')
         company = validated_data.get('company')
-        if not company:
+        if company:
+            validated_data.pop('company')
+        else:
             company = Company.objects.get(name=profile.get('company'))
         password = validated_data.pop('password')
         user = User(**validated_data)
